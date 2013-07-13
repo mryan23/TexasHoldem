@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PokerGame</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_dealer_create_game">DealerCreateGameActivity</string>
+    <string name="title_activity_player_join_game">PlayerJoinGameActivity</string>
+    <string name="title_activity_dealer_main">DealerMainActivity</string>
+    <string name="startGame">Start Game</string>
+    <string name="title_activity_player_hand">PlayerHandActivity</string>
+    <string name="Fold">Fold</string>
+    <string name="Bet">Bet</string>
+
+</resources>
