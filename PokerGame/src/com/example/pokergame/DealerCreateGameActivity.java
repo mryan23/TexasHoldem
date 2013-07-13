@@ -1,7 +1,9 @@
 package com.example.pokergame;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 
 public class DealerCreateGameActivity extends Activity {
 
+	Object lock = new Object();
+	ArrayList<InetAddress> player_addr = new ArrayList<InetAddress>();
 	TextView ipAddressEditText;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +26,7 @@ public class DealerCreateGameActivity extends Activity {
 		ipAddressEditText.setText(Utils.getIPAddress(true));
 		TCPListener listener;
 		try {
-			listener = new TCPListener( new ServerSocket(6789));
+			listener = new TCPListener( new ServerSocket(6789), player_addr, lock);
 			listener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
