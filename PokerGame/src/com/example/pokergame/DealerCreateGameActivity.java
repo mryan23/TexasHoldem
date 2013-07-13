@@ -1,5 +1,8 @@
 package com.example.pokergame;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -17,6 +20,15 @@ public class DealerCreateGameActivity extends Activity {
 		setContentView(R.layout.activity_dealer_create_game);
 		ipAddressEditText=(TextView)findViewById(R.id.ipAddressText);
 		ipAddressEditText.setText(Utils.getIPAddress(true));
+		TCPListener listener;
+		try {
+			listener = new TCPListener( new ServerSocket(6789));
+			listener.run();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
