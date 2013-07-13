@@ -1,7 +1,10 @@
 package com.example.pokergame;
 
-import android.os.Bundle;
+import java.io.IOException;
+import java.net.ServerSocket;
+
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 
 public class PlayerHandActivity extends Activity {
@@ -10,6 +13,14 @@ public class PlayerHandActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_player_hand);
+		
+		try {
+			TCPListener2 tl = new TCPListener2(new ServerSocket(6789), null);
+			tl.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

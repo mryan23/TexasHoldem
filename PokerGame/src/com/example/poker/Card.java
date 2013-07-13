@@ -1,6 +1,8 @@
 package com.example.poker;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable{
 
 	public static final int CLUB = 0;
 	public static final int DIAMOND = 1;

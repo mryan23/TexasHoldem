@@ -3,13 +3,15 @@ package com.example.pokergame;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class TCPListener extends Thread {
+public class TCPListener2 extends Thread {
 	ServerSocket sock;
 
 	ArrayList<InetAddress> player_addr;
@@ -18,13 +20,13 @@ public class TCPListener extends Thread {
 	boolean loop = true;
 	boolean isDealer = true;
 
-	public TCPListener(ServerSocket socket, ArrayList<Integer> isSuccessful) {
+	public TCPListener2(ServerSocket socket, ArrayList<Integer> isSuccessful) {
 		sock = socket;
 		this.isSuccessful = isSuccessful;
 		isDealer = false;
 	}
 
-	public TCPListener(ServerSocket socket, ArrayList<InetAddress> player_addr,
+	public TCPListener2(ServerSocket socket, ArrayList<InetAddress> player_addr,
 			Object lock) {
 		sock = socket;
 		this.player_addr = player_addr;
@@ -45,8 +47,10 @@ public class TCPListener extends Thread {
 	public void tcpStuff(ServerSocket welcomeSocket) {
 		try {
 			Socket connectionSocket = welcomeSocket.accept();
-			BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(connectionSocket.getInputStream()));
+			InputStream is = connectionSocket.getInputStream();
+		 	ObjectInputStream ois = new ObjectInputStream(is);
+			/*BufferedReader inFromClient = new BufferedReader(
+					new InputStreamReader(is));*/
 			InetAddress add = connectionSocket.getInetAddress();
 			byte[] bytes = add.getAddress();
 			String message = add.toString();
@@ -63,22 +67,26 @@ public class TCPListener extends Thread {
 					}
 				}
 			}
-			String clientSentence = inFromClient.readLine();
-			System.out.println(clientSentence);
-			if (clientSentence.contains("STARTGAME")) {
+			Message m = (Message)ois.readObject();
+			System.out.println(m.card.getValue());
+			DataOutputStream outToClient = new DataOutputStream(
+					connectionSocket.getOutputStream());
+			outToClient.writeBytes(m.card.getValue()+"\n");
+			
+			//String clientSentence = inFromClient.readLine();
+			//System.out.println(clientSentence);
+			/*if (clientSentence.contains("STARTGAME")) {
 				isSuccessful.add(1);
 				System.out.println("Value: " + isSuccessful.get(0));
 				loop = false;
 			}
-			DataOutputStream outToClient = new DataOutputStream(
-					connectionSocket.getOutputStream());
+			
 			outToClient.writeBytes(clientSentence + '\n');
 			// System.out.println(clientSentence);
-			// message = clientSentence;
+			// message = clientSentence;*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			loop = false;
 		}
 	}
 

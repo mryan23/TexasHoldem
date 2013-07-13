@@ -1,9 +1,11 @@
 package com.example.pokergame;
 
+import java.io.Serializable;
+
 import com.example.poker.Card;
 
 
-public class Message {
+public class Message implements Serializable{
 	MessageType msgType; 
 	int currentBet;
 	int proposedBet;

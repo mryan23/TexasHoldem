@@ -68,13 +68,14 @@ public class DealerCreateGameActivity extends Activity {
 					SendTcpMessage stm = new SendTcpMessage(addr, "STARTGAME");
 					stm.start();
 				}
-				listener.interrupt();
+				
 				try {
 					sock.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				listener.interrupt();
 				
 				
 				String[] ipAddrs = new String[player_addr.size()];

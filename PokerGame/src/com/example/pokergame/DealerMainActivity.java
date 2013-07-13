@@ -8,6 +8,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+import com.example.poker.Card;
 
 public class DealerMainActivity extends Activity {
 
@@ -33,13 +38,34 @@ public class DealerMainActivity extends Activity {
 
 				}
 			}
+			
+			
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			System.out.println("OIWEROIJWER");
 			e.printStackTrace();
 		}
 		
+		Button test = (Button)findViewById(R.id.sendTestCard);
+		test.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				for(InetAddress ip: player_addr){
+					Message message = new Message();
+					message.card=new Card(14,Card.SPADE);
+					SendTcpMessage2 stm = new SendTcpMessage2(ip, message);
+					stm.start();
+				}
+			}
+			
+		});
+		
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
