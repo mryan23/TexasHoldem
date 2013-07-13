@@ -1,0 +1,28 @@
+package com.example.pokergame;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.widget.Button;
+
+public class SelectRoleActivity extends Activity {
+
+	Button playerButton;
+	Button dealerButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select_role);
+        playerButton = (Button)findViewById(R.id.playerRoleButton);
+        dealerButton=(Button)findViewById(R.id.dealerRoleButton);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.select_role, menu);
+        return true;
+    }
+    
+}

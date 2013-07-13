@@ -4,5 +4,7 @@
     <string name="app_name">PokerGame</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_dealer_create_game">DealerCreateGameActivity</string>
+    <string name="title_activity_player_join_game">PlayerJoinGameActivity</string>
 
 </resources>
