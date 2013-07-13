@@ -50,8 +50,6 @@ public class PlayerHandActivity extends Activity {
 		foldButton = (Button) findViewById(R.id.Fold);
 		betButton = (Button) findViewById(R.id.Bet);
 		np = (NumberPicker) findViewById(R.id.betSelector);
-		np.setMaxValue(100);
-		np.setMinValue(0);
 		moneyText.setText("$" + p.getTotalMoney() + "");
 		setListeners();
 
@@ -85,7 +83,8 @@ public class PlayerHandActivity extends Activity {
 							else{
 								turnText.setText(" ");
 							}
-							
+							np.setMaxValue(100);
+							np.setMinValue(0);
 
 						}
 					}
