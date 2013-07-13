@@ -48,7 +48,7 @@ public class PlayerJoinGameActivity extends Activity {
 		}
 		setListeners(); // send ip/joining msg
 
-		Timer autoUpdate = new Timer();
+		final Timer autoUpdate = new Timer();
 		autoUpdate.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -57,6 +57,7 @@ public class PlayerJoinGameActivity extends Activity {
 						if (isSuccessful.contains(1)) {
 							System.out.println("Value in Activity: " + isSuccessful.get(0));
 							Intent i = new Intent(context, PlayerHandActivity.class);
+							autoUpdate.cancel();
 							startActivity(i);
 						}
 					}
