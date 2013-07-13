@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class SendTcpMessage implements Runnable {
+public class SendTcpMessage extends Thread {
 	InetAddress ipAddress;
 	String message;
 

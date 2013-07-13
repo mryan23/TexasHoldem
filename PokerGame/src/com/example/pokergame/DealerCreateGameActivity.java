@@ -23,7 +23,7 @@ public class DealerCreateGameActivity extends Activity {
 		TCPListener listener;
 		try {
 			listener = new TCPListener( new ServerSocket(6789));
-			listener.run();
+			listener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

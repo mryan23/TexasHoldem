@@ -37,7 +37,7 @@ public class PlayerJoinGameActivity extends Activity {
 				String str = ipAddressField.getText().toString();
 				try {
 					SendTcpMessage stm = new SendTcpMessage(InetAddress.getByName(str),"TESTING123");
-					stm.run();
+					stm.start();
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
