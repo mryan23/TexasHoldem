@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView1"
         android:layout_alignBottom="@+id/textView1"
+        android:layout_marginLeft="32dp"
         android:layout_toRightOf="@+id/textView1"
         android:ems="10"
         android:inputType="phone" >
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/ipAddressEditText"
         android:layout_alignBottom="@+id/ipAddressEditText"
+        android:layout_marginLeft="18dp"
         android:layout_toRightOf="@+id/ipAddressEditText"
         android:text="Join" />
 

@@ -48,7 +48,9 @@
         </activity>
         <activity
             android:name="com.example.pokergame.PlayerHandActivity"
-            android:label="@string/title_activity_player_hand" >
+            android:label="@string/title_activity_player_hand" 
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
     </application>
 
