@@ -28,9 +28,11 @@ public class SendTcpMessage extends Thread {
 			BufferedReader inFromServer = new BufferedReader(
 					new InputStreamReader(clientSocket.getInputStream()));
 			// sentence = inFromUser.readLine();
-			System.out.println("SENDING TO DEALER");
+			
 			outToServer.writeBytes(message + '\n');
+			System.out.println("SENDING TO DEALER"+message);
 			String modifiedSentence = inFromServer.readLine();
+			System.out.println("RECIEVING "+modifiedSentence);
 			//System.out.println("FROM SERVER: " + modifiedSentence);
 			clientSocket.close();
 		} catch (Exception e) {

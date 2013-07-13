@@ -9,7 +9,7 @@
     tools:context=".PlayerJoinGameActivity" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/connectedUsersTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PLAYER" />
@@ -18,8 +18,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/connectedUsersTextView"
+        android:layout_below="@+id/connectedUsersTextView"
         android:layout_marginTop="38dp"
         android:text="Enter IP of Dealer:"
         android:textAppearance="?android:attr/textAppearanceLarge" />

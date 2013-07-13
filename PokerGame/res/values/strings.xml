@@ -6,6 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_dealer_create_game">DealerCreateGameActivity</string>
     <string name="title_activity_player_join_game">PlayerJoinGameActivity</string>
+    <string name="title_activity_dealer_main">DealerMainActivity</string>
+    <string name="startGame">Start Game</string>
     <string name="title_activity_player_hand">PlayerHandActivity</string>
 
 </resources>

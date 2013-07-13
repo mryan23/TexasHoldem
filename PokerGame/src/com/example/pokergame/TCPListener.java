@@ -14,7 +14,7 @@ public class TCPListener extends Thread {
 
 	ArrayList<InetAddress> player_addr;
 	Object lock;
-	ArrayList<Integer> isSuccessful;
+	ArrayList<Integer> isSuccessful; 
 	boolean loop = true;
 	boolean isDealer = true;
 

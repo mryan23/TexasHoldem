@@ -41,10 +41,14 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.example.pokergame.PlayerHandActivity"
-            android:label="@string/title_activity_player_hand" 
+            android:name="com.example.pokergame.DealerMainActivity"
+            android:label="@string/title_activity_dealer_main"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.example.pokergame.PlayerHandActivity"
+            android:label="@string/title_activity_player_hand" >
         </activity>
     </application>
 
