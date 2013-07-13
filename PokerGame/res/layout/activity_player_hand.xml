@@ -9,8 +9,18 @@
     tools:context=".PlayerHandActivity" >
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
+
+    <TextView
+        android:id="@+id/DebugCardTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginLeft="98dp"
+        android:layout_marginTop="43dp"
+        android:layout_toRightOf="@+id/textView2" />
 
 </RelativeLayout>

@@ -1,33 +1,34 @@
 package com.example.pokergame;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.example.poker.Card;
+
 public class TCPListener2 extends Thread {
 	ServerSocket sock;
 
 	ArrayList<InetAddress> player_addr;
 	Object lock;
-	ArrayList<Integer> isSuccessful; 
+	ArrayList<Integer> isSuccessful;
 	boolean loop = true;
 	boolean isDealer = true;
+	ArrayList<Card> hand = new ArrayList<Card>();
 
-	public TCPListener2(ServerSocket socket, ArrayList<Integer> isSuccessful) {
+	public TCPListener2(ServerSocket socket, ArrayList<Card> hand) {
 		sock = socket;
-		this.isSuccessful = isSuccessful;
+		this.hand = hand;
 		isDealer = false;
 	}
 
-	public TCPListener2(ServerSocket socket, ArrayList<InetAddress> player_addr,
-			Object lock) {
+	public TCPListener2(ServerSocket socket,
+			ArrayList<InetAddress> player_addr, Object lock) {
 		sock = socket;
 		this.player_addr = player_addr;
 		this.lock = lock;
@@ -48,9 +49,11 @@ public class TCPListener2 extends Thread {
 		try {
 			Socket connectionSocket = welcomeSocket.accept();
 			InputStream is = connectionSocket.getInputStream();
-		 	ObjectInputStream ois = new ObjectInputStream(is);
-			/*BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(is));*/
+			ObjectInputStream ois = new ObjectInputStream(is);
+			/*
+			 * BufferedReader inFromClient = new BufferedReader( new
+			 * InputStreamReader(is));
+			 */
 			InetAddress add = connectionSocket.getInetAddress();
 			byte[] bytes = add.getAddress();
 			String message = add.toString();
@@ -67,27 +70,39 @@ public class TCPListener2 extends Thread {
 					}
 				}
 			}
-			Message m = (Message)ois.readObject();
+			Message m = (Message) ois.readObject();
 			System.out.println(m.card.getValue());
 			DataOutputStream outToClient = new DataOutputStream(
 					connectionSocket.getOutputStream());
-			outToClient.writeBytes(m.card.getValue()+"\n");
-			
-			//String clientSentence = inFromClient.readLine();
-			//System.out.println(clientSentence);
-			/*if (clientSentence.contains("STARTGAME")) {
-				isSuccessful.add(1);
-				System.out.println("Value: " + isSuccessful.get(0));
-				loop = false;
+			outToClient.writeBytes("ACK" + "\n");
+
+			switch (m.msgType) {
+			case CARD:
+				synchronized (hand) {
+					hand.add(m.card);
+				}
+				break;
+			case TURN:
+				break;
+			case RESULT:
+				break;
+			default:
+				break;
 			}
-			
-			outToClient.writeBytes(clientSentence + '\n');
+
+			// String clientSentence = inFromClient.readLine();
 			// System.out.println(clientSentence);
-			// message = clientSentence;*/
+			/*
+			 * if (clientSentence.contains("STARTGAME")) { isSuccessful.add(1);
+			 * System.out.println("Value: " + isSuccessful.get(0)); loop =
+			 * false; }
+			 * 
+			 * outToClient.writeBytes(clientSentence + '\n'); //
+			 * System.out.println(clientSentence); // message = clientSentence;
+			 */
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

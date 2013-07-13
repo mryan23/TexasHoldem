@@ -1,0 +1,26 @@
+﻿message class
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   PokerGame/bin/PokerGame.apk
+#	modified:   PokerGame/bin/classes.dex
+#	new file:   PokerGame/bin/classes/com/example/pokergame/Message.class
+#	new file:   PokerGame/bin/classes/com/example/pokergame/MessageType.class
+#	new file:   PokerGame/bin/classes/com/example/pokergame/Result.class
+#	new file:   PokerGame/bin/dexedLibs/android-support-v4-1ba97f3d16bf360172c1f4685c55fd7f.jar
+#	modified:   PokerGame/bin/resources.ap_
+#	new file:   PokerGame/src/com/example/pokergame/Message.java
+#	new file:   PokerGame/src/com/example/pokergame/MessageType.java
+#	new file:   PokerGame/src/com/example/pokergame/Result.java
+#
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	deleted:    PokerGame/bin/dexedLibs/android-support-v4-682f89b9c0cfc511ee8f6b708b52603c.jar
+#	deleted:    PokerGame/bin/dexedLibs/android-support-v4-6a786535b0280018a7b781642e22a77f.jar
+#
+
