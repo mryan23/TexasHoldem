@@ -6,17 +6,17 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.TextView;
+import android.widget.EditText;
 
 public class DealerCreateGameActivity extends Activity {
 
-	TextView ipAddressEditText;
+	EditText ipAddressEditText;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dealer_create_game);
-		ipAddressEditText=(TextView)findViewById(R.id.ipAddressText);
-		ipAddressEditText.setText(Utils.getIPAddress(true));
+		ipAddressEditText=(EditText)findViewById(R.id.ipAddressText);
+		ipAddressEditText.setText(getLocalIpAddress());
 	}
 
 	@Override

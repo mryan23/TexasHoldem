@@ -6,7 +6,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.TextView;
+import android.widget.EditText;
 
 public class DealerCreateGameActivity extends Activity {
 
