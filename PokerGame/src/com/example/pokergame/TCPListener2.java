@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.example.poker.Card;
+import com.example.poker.Player;
 
 public class TCPListener2 extends Thread {
 	ServerSocket sock;
@@ -19,11 +19,11 @@ public class TCPListener2 extends Thread {
 	ArrayList<Integer> isSuccessful;
 	boolean loop = true;
 	boolean isDealer = true;
-	ArrayList<Card> hand = new ArrayList<Card>();
+	Player p;
 
-	public TCPListener2(ServerSocket socket, ArrayList<Card> hand) {
+	public TCPListener2(ServerSocket socket, Player p) {
 		sock = socket;
-		this.hand = hand;
+		this.p = p;
 		isDealer = false;
 	}
 
@@ -78,13 +78,20 @@ public class TCPListener2 extends Thread {
 
 			switch (m.msgType) {
 			case CARD:
-				synchronized (hand) {
-					hand.add(m.card);
+				synchronized (p) {
+					if (!p.getHand().hand.contains(m.card)) {
+						p.addCard(m.card);
+					}
 				}
 				break;
 			case TURN:
+				p.turn = true;
+				synchronized (p) {
+					p.minBet = m.currentBet;
+				}
 				break;
 			case RESULT:
+				
 				break;
 			default:
 				break;

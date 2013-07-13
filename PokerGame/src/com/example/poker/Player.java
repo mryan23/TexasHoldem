@@ -10,6 +10,8 @@ public class Player implements Comparable<Player> {
 	private int amountInPots;
 	private Hand hand;
 	private int status;
+	public int minBet;
+	public boolean turn = false;
 
 	public Player(int money) {
 		this.money = money;

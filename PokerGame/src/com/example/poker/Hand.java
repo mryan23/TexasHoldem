@@ -7,7 +7,7 @@ public class Hand implements Iterable<Card> {
 
 	public static final int MAX_SIZE = 7;
 	
-	private ArrayList<Card> hand;
+	public ArrayList<Card> hand;
 	
 	public Hand() {
 		this.hand = new ArrayList<Card>();

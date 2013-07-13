@@ -57,6 +57,9 @@ public class PlayerJoinGameActivity extends Activity {
 						if (isSuccessful.contains(1)) {
 							System.out.println("Value in Activity: " + isSuccessful.get(0));
 							Intent i = new Intent(context, PlayerHandActivity.class);
+							Bundle bundle = new Bundle();
+							bundle.putString("ipAddress", ipAddressField.toString());
+							i.putExtras(bundle);
 							autoUpdate.cancel();
 							startActivity(i);
 						}
