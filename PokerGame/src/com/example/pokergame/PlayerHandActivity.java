@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -24,11 +26,13 @@ import com.example.poker.Player;
 public class PlayerHandActivity extends Activity {
 
 	Player p = new Player(1000);
-	TextView debugCard, turnText, moneyText;
+	TextView turnText, moneyText;
 	Button foldButton;
 	Button betButton;
 	InetAddress ipAddress;
 	NumberPicker np;
+	boolean hasRecievedCards = false;
+	ImageView[] imageViews= new ImageView[2];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +48,15 @@ public class PlayerHandActivity extends Activity {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		debugCard = (TextView) findViewById(R.id.DebugCardTextView);
 		turnText = (TextView) findViewById(R.id.turnLabel);
 		moneyText = (TextView) findViewById(R.id.money);
 		foldButton = (Button) findViewById(R.id.Fold);
 		betButton = (Button) findViewById(R.id.Bet);
 		np = (NumberPicker) findViewById(R.id.betSelector);
+		imageViews[0]=(ImageView)findViewById(R.id.playerImageView1);
+		imageViews[1]=(ImageView)findViewById(R.id.playerImageView2);
+		
+		np.setMinValue(0);
 		moneyText.setText("$" + p.getTotalMoney() + "");
 		setListeners();
 
@@ -68,11 +75,16 @@ public class PlayerHandActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						synchronized (p) {
-							String str = "";
-							for (Card c : p.getHand().hand) {
-								str += c.getValue() + " " + c.getSuit() + "\n";
+							
+							if(!hasRecievedCards && p.getHand().hand.size() > 0){
+								hasRecievedCards = true;
+								for (int i = 0; i < p.getHand().hand.size(); i++) {
+									Card c =p.getHand().hand.get(i);
+									imageViews[i].setImageResource((getResources().getIdentifier("img"+c.getValue()+"_"+c.getSuit(), "drawable", "com.example.pokergame")));
+								}
 							}
-							debugCard.setText(str);
+							
+							
 							if (foldButton.isEnabled() != p.turn)
 								foldButton.setEnabled(p.turn);
 							if (betButton.isEnabled() != p.turn)
@@ -83,8 +95,7 @@ public class PlayerHandActivity extends Activity {
 							else{
 								turnText.setText(" ");
 							}
-							np.setMaxValue(100);
-							np.setMinValue(0);
+							np.setMaxValue(p.getTotalMoney());
 
 						}
 					}

@@ -1,5 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_launcher"
@@ -9,60 +10,102 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".PlayerHandActivity" >
 
-    <TextView
-        android:id="@+id/DebugCardTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="126dp"
-        android:layout_marginTop="66dp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
-    <NumberPicker
-        android:id="@+id/betSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="dp" />
+        <LinearLayout
+            android:id="@+id/CardLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/Bet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/betSelector"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="26dp"
-        android:layout_marginRight="78dp"
-        android:text="@string/Bet" />
+            <ImageView
+                android:id="@+id/playerImageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/b2fv" >
+             	<requestFocus />
+            </ImageView>
 
-    <Button
-        android:id="@+id/Fold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Bet"
-        android:layout_alignBottom="@+id/Bet"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="54dp"
-        android:text="@string/Fold" />
+            <ImageView
+                android:id="@+id/playerImageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/b2fv" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/turnLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/DebugCardTextView"
-        android:layout_marginRight="29dp"
-        android:layout_toLeftOf="@+id/Bet"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3" >
+        </LinearLayout>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/turnLabel"
-        android:layout_alignLeft="@+id/betSelector"
-        android:layout_marginBottom="18dp"
-        android:text="  "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" >
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:orientation="vertical" >
+            
+            
+             <TextView
+                android:id="@+id/money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="MONEY HERE"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+
+            <TextView
+                android:id="@+id/turnLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TURN"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+           
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3" >
+
+            <Button
+                android:id="@+id/Bet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/Bet" />
+
+            <NumberPicker
+                android:id="@+id/betSelector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/Fold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/Fold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
