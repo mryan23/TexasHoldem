@@ -14,3 +14,7 @@ PokerGame/bin/PokerGame.apk
 PokerGame/bin/PokerGame.apk
 
 PokerGame/bin/PokerGame.apk
+
+*.class
+
+.metadata/*
