@@ -108,6 +108,7 @@ public class Dealer {
 						newMessage.setResult(Result.LOSE);
 					
 					SendTcpMessage2 stm=new SendTcpMessage2(player_addr.get(i),newMessage);
+					stm.start();
 				}
 				
 			} catch (TooFewCardsException e) {

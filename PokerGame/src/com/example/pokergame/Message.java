@@ -6,11 +6,11 @@ import com.example.poker.Card;
 
 
 public class Message implements Serializable{
-	MessageType msgType; 
-	int currentBet;
-	int proposedBet;
-	Card card;
-	int money;
+	public MessageType msgType; 
+	public int currentBet;
+	public int proposedBet;
+	public Card card;
+	public int money;
 	
 	public MessageType getMsgType() {
 		return msgType;

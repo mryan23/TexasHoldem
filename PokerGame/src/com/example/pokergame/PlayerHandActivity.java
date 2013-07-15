@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +31,9 @@ public class PlayerHandActivity extends Activity {
 	InetAddress ipAddress;
 	NumberPicker np;
 	boolean hasRecievedCards = false;
-	ImageView[] imageViews= new ImageView[2];
+	TCPListener2 tl;
+
+	ImageView[] imageViews = new ImageView[2];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +54,15 @@ public class PlayerHandActivity extends Activity {
 		foldButton = (Button) findViewById(R.id.Fold);
 		betButton = (Button) findViewById(R.id.Bet);
 		np = (NumberPicker) findViewById(R.id.betSelector);
-		imageViews[0]=(ImageView)findViewById(R.id.playerImageView1);
-		imageViews[1]=(ImageView)findViewById(R.id.playerImageView2);
-		
+		imageViews[0] = (ImageView) findViewById(R.id.playerImageView1);
+		imageViews[1] = (ImageView) findViewById(R.id.playerImageView2);
+
 		np.setMinValue(0);
 		moneyText.setText("$" + p.getTotalMoney() + "");
 		setListeners();
 
 		try {
-			TCPListener2 tl = new TCPListener2(new ServerSocket(6789), p);
+			tl = new TCPListener2(new ServerSocket(6789), p);
 			tl.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -75,34 +76,56 @@ public class PlayerHandActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						synchronized (p) {
-							
-							if(!hasRecievedCards && p.getHand().hand.size() > 0){
-								hasRecievedCards = true;
-								for (int i = 0; i < p.getHand().hand.size(); i++) {
-									Card c =p.getHand().hand.get(i);
-									imageViews[i].setImageResource((getResources().getIdentifier("img"+c.getValue()+"_"+c.getSuit(), "drawable", "com.example.pokergame")));
-								}
-							}
-							
-							
-							if (foldButton.isEnabled() != p.turn)
-								foldButton.setEnabled(p.turn);
-							if (betButton.isEnabled() != p.turn)
-								betButton.setEnabled(p.turn);
-							if(p.turn){
-								turnText.setText("Its your turn!");
-							}
-							else{
-								turnText.setText(" ");
-							}
-							np.setMaxValue(p.getTotalMoney());
-
+							updateScreen();
 						}
 					}
 				});
 			}
 		}, 0, 100);
 
+	}
+
+	private void updateScreen() {
+		synchronized (p) {
+			if (p.status == Player.FOLDED || p.status == Player.GAME_OVER) {
+				clearScreen();
+			}
+
+			if (!hasRecievedCards && p.getHand().hand.size() > 0) {
+				for (int i = 0; i < p.getHand().hand.size(); i++) {
+					Card c = p.getHand().hand.get(i);
+					imageViews[i].setImageResource((getResources()
+							.getIdentifier(
+									"img" + c.getValue() + "_" + c.getSuit(),
+									"drawable", "com.example.pokergame")));
+				}
+			}
+			if (p.getHand().hand.size() == 2) {
+				hasRecievedCards = true;
+			}
+
+			if (foldButton.isEnabled() != p.turn)
+				foldButton.setEnabled(p.turn);
+			if (betButton.isEnabled() != p.turn)
+				betButton.setEnabled(p.turn);
+			if (p.turn) {
+				turnText.setText("Its your turn!");
+			} else {
+				turnText.setText(" ");
+			}
+			np.setMaxValue(p.getTotalMoney());
+			moneyText.setText(p.getTotalMoney()+"");
+
+		}
+	}
+
+	private void clearScreen() {
+		p = new Player(p.getTotalMoney());
+		tl.setPlayer(p);
+		hasRecievedCards = false;
+		for (ImageView im : imageViews) {
+			im.setImageResource(R.drawable.b2fv);
+		}
 	}
 
 	private void setListeners() {
@@ -115,6 +138,7 @@ public class PlayerHandActivity extends Activity {
 				p.turn = false;
 				SendTcpMessage2 stm = new SendTcpMessage2(ipAddress, msg);
 				stm.start();
+				p.status = Player.FOLDED;
 
 			}
 

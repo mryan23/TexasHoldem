@@ -2,14 +2,16 @@ package com.example.poker;
 
 public class Player implements Comparable<Player> {
 	
+	public static final int GAME_OVER=-2;
 	public static final int FOLDED = -1;
 	public static final int BETTING = 0;
 	public static final int ALL_IN = 1;
+	
 
 	private int money;
 	private int amountInPots;
 	private Hand hand;
-	private int status;
+	public int status;
 	public int minBet;
 	public boolean turn = false;
 

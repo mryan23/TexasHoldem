@@ -130,9 +130,11 @@ public class TCPListener3 extends Thread {
 				case FOLD:
 					dealer.foldCurrentPlayer();
 					if (dealer.getPlayers().size() == 1) {
-						newMessage.msgType = MessageType.RESULT;
-						newMessage.result = Result.WIN;
-						newMessage.money = dealer.getPot();
+						dealer.winnerText="Winner";
+						Message foldMessage = new Message();
+						foldMessage.msgType=MessageType.RESULT;
+						foldMessage.money=dealer.getPot();
+						foldMessage.result=Result.WIN;
 					} else {
 						if (dealer.sameCount == dealer.getPlayers().size()) {
 							if (dealer.getCards().size() == 5) {
