@@ -17,6 +17,7 @@ public class TCPListener extends Thread {
 	ArrayList<Integer> isSuccessful; 
 	boolean loop = true;
 	boolean isDealer = true;
+	boolean sendResponse = true;
 
 	public TCPListener(ServerSocket socket, ArrayList<Integer> isSuccessful) {
 		sock = socket;
@@ -29,6 +30,9 @@ public class TCPListener extends Thread {
 		sock = socket;
 		this.player_addr = player_addr;
 		this.lock = lock;
+	}
+	public void sendResponse(boolean yes){
+		sendResponse=yes;
 	}
 
 	public void run() {
@@ -64,9 +68,9 @@ public class TCPListener extends Thread {
 				}
 			}
 			String clientSentence = inFromClient.readLine();
-			System.out.println(clientSentence);
+			System.out.println(clientSentence); 
 			if (clientSentence.contains("STARTGAME")) {
-				isSuccessful.add(1);
+				isSuccessful.add(1); 
 				System.out.println("Value: " + isSuccessful.get(0));
 				loop = false;
 			}

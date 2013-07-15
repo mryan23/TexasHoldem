@@ -2,7 +2,11 @@ package com.example.pokergame;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,80 +27,101 @@ public class DealerCreateGameActivity extends Activity {
 
 	Object lock = new Object();
 	ArrayList<InetAddress> player_addr = new ArrayList<InetAddress>();
+	
 	TextView ipAddressEditText, connectedPlayersTextView;
 	TCPListener listener;
 	Context context = this;
 	ServerSocket sock;
+
+	Thread udpThread;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dealer_create_game);
-		ipAddressEditText=(TextView)findViewById(R.id.ipAddressText);
+		ipAddressEditText = (TextView) findViewById(R.id.ipAddressText);
 		ipAddressEditText.setText(Utils.getIPAddress(true));
-		connectedPlayersTextView=(TextView)findViewById(R.id.connectedUsersTextView);
+		connectedPlayersTextView = (TextView) findViewById(R.id.connectedUsersTextView);
 		connectedPlayersTextView.setText("0");
-		
-		Timer autoUpdate = new Timer();
-		  autoUpdate.schedule(new TimerTask() {
-		   @Override
-		   public void run() {
-		    runOnUiThread(new Runnable() {
-		     public void run() {
-		      updateConnectedPlayers();
-		     }
-		    });
-		   }
-		  }, 0, 500);
-		
+
 		try {
 			sock = new ServerSocket(6789);
-			listener = new TCPListener( sock, player_addr, lock);
+			listener = new TCPListener(sock, player_addr, lock);
 			listener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		
-		
-		
-		Button startGameButton = (Button)findViewById(R.id.startGameButton);
-		startGameButton.setOnClickListener(new OnClickListener(){
+		try {
+			NetworkInterface ni;
+			try {
+				ni = NetworkInterface.getByInetAddress(InetAddress.getByName(Utils.getIPAddress(true)));
+				InterfaceAddress ia = ni.getInterfaceAddresses().get(1);
+				InetAddress broad = ia.getBroadcast();
+				String dummy = broad.toString();
+				dummy+=" ";
+				udpThread = new UDPBroadcaster(broad);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		udpThread.start();
+
+		Timer autoUpdate = new Timer();
+		autoUpdate.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						updateConnectedPlayers();
+					}
+				});
+			}
+		}, 0, 500);
+
+
+		Button startGameButton = (Button) findViewById(R.id.startGameButton);
+		startGameButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				for(InetAddress addr: player_addr){
+				udpThread.interrupt();
+				for (InetAddress addr : player_addr) {
 					SendTcpMessage stm = new SendTcpMessage(addr, "STARTGAME");
 					stm.start();
 				}
-				
+
 				try {
 					sock.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				listener.interrupt();
-				
-				
+
 				String[] ipAddrs = new String[player_addr.size()];
-				for(int i = 0; i < ipAddrs.length; i++){
-					ipAddrs[i]=player_addr.get(i).toString();
+				for (int i = 0; i < ipAddrs.length; i++) {
+					ipAddrs[i] = player_addr.get(i).toString();
 				}
 				Bundle bundle = new Bundle();
 				bundle.putStringArray("ipAddresses", ipAddrs);
 				Intent i = new Intent(context, DealerMainActivity.class);
-				i.putExtras(bundle); 
+				i.putExtras(bundle);
 				startActivity(i);
-				
-				
+
 			}
-			
+
 		});
-		
+
 	}
-	
-	private void updateConnectedPlayers(){
-		connectedPlayersTextView.setText(player_addr.size()+"");
+
+	private void updateConnectedPlayers() {
+		connectedPlayersTextView.setText(player_addr.size() + "");
 	}
 
 	@Override
@@ -105,6 +130,7 @@ public class DealerCreateGameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.dealer_create_game, menu);
 		return true;
 	}
+
 	public String getLocalIpAddress() {
 		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();

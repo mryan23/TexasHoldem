@@ -33,10 +33,15 @@ public class PlayerJoinGameActivity extends Activity {
 		joinButton = (Button) findViewById(R.id.joinGameButton);
 
 		TCPListener listener;
+		
+		UDPListener udpListener;
 
 		try {
 			listener = new TCPListener(new ServerSocket(6789), isSuccessful);
+			listener.sendResponse(false);
 			listener.start();
+			udpListener = new UDPListener();
+			udpListener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
