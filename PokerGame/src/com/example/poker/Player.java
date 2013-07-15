@@ -15,6 +15,7 @@ public class Player implements Comparable<Player> {
 	public int minBet;
 	public boolean turn = false;
 	public boolean updated = false;
+	private String updateText="";
 
 	public Player(int money) {
 		this.money = money;
@@ -23,6 +24,12 @@ public class Player implements Comparable<Player> {
 		this.status = BETTING;
 	}
 	
+	public void setUpdateText(String str){
+		updateText=str;
+	}
+	public String getUpdateText(){
+		return updateText;
+	}
 	public void reset() {
 		this.amountInPots = 0;
 		this.hand = new Hand();	

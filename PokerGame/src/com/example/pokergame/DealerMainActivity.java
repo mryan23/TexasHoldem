@@ -121,11 +121,21 @@ public class DealerMainActivity extends Activity {
 			winnerDisplayed=true;
 			Message newMessage = new Message();
 			newMessage.msgType = MessageType.RESULT;
-			newMessage.result = Result.WIN;
 			newMessage.money = dealer.getPot();
-			for(InetAddress ip: dealer.getPlayers())
+			newMessage.result = Result.WIN;
+			
+			for(int i = 0; i < dealer.getPlayers().size(); i++)
 			{
-				SendTcpMessage2 sendTcp = new SendTcpMessage2(ip, newMessage);
+				if(i==dealer.winner){
+					newMessage.result=Result.WIN;
+					newMessage.message="You Won!";
+				}
+				else
+				{
+					newMessage.result=Result.LOSE;
+					newMessage.message="You Lost!";
+				}
+				SendTcpMessage2 sendTcp = new SendTcpMessage2(dealer.getPlayers().get(i), newMessage);
 				sendTcp.start();
 			}
 			for(int i = 0; i < drawn.length;i++)

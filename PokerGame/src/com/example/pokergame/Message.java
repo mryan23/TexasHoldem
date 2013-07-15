@@ -11,6 +11,7 @@ public class Message implements Serializable{
 	public int proposedBet;
 	public Card card;
 	public int money;
+	public String message;
 	
 	public MessageType getMsgType() {
 		return msgType;

@@ -20,6 +20,7 @@ public class Dealer {
 	public int sameCount;
 	public Deck deck;
 	public String winnerText;
+	public int winner;
 	
 	public Dealer(Deck d) {
 		reset(d);
@@ -34,6 +35,7 @@ public class Dealer {
 		prevBet = 0;
 		sameCount = 0;
 		winnerText="";
+		winner=-1;
 	}
 
 	public int getPot() {
@@ -119,6 +121,7 @@ public class Dealer {
 			}
 			try {
 				int index = HandRank.compareHands(ha);
+				winner=index;
 				System.out.println("WINNER IS "+index+" WITH "+new HandRank(hands.get(index)).getRankName());
 				winnerText="Winner "+new HandRank(hands.get(index)).getRankName();
 				for(int i = 0; i < player_addr.size(); i++){

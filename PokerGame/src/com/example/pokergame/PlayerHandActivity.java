@@ -25,7 +25,7 @@ import com.example.poker.Player;
 public class PlayerHandActivity extends Activity {
 
 	Player p = new Player(1000);
-	TextView turnText, moneyText;
+	TextView turnText, moneyText, updateText;
 	Button foldButton;
 	Button betButton;
 	InetAddress ipAddress;
@@ -49,6 +49,7 @@ public class PlayerHandActivity extends Activity {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		updateText = (TextView) findViewById(R.id.PlayerUpdateTextView);
 		turnText = (TextView) findViewById(R.id.turnLabel);
 		moneyText = (TextView) findViewById(R.id.money);
 		foldButton = (Button) findViewById(R.id.Fold);
@@ -123,6 +124,7 @@ public class PlayerHandActivity extends Activity {
 			p.updated = false;
 		}
 		moneyText.setText(p.getTotalMoney() + "");
+		updateText.setText(p.getUpdateText());
 
 		// }
 	}
@@ -147,6 +149,7 @@ public class PlayerHandActivity extends Activity {
 				SendTcpMessage2 stm = new SendTcpMessage2(ipAddress, msg);
 				stm.start();
 				p.status = Player.FOLDED;
+				p.setUpdateText("");
 
 			}
 
@@ -160,6 +163,7 @@ public class PlayerHandActivity extends Activity {
 				msg.msgType = MessageType.BET;
 				msg.proposedBet = np.getValue();
 				p.turn = false;
+				p.setUpdateText("");
 				try {
 					p.bet(np.getValue());
 					moneyText.setText("$" + p.getTotalMoney() + "");

@@ -83,6 +83,8 @@ public class TCPListener2 extends Thread {
 
 			synchronized (p) {
 				p.updated = true;
+				if(m.message!=null)
+					p.setUpdateText(m.message);
 				switch (m.msgType) {
 				case CARD:
 					if (!p.getHand().hand.contains(m.card)) {

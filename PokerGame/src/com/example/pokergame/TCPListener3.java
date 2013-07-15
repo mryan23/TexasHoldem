@@ -114,11 +114,22 @@ public class TCPListener3 extends Thread {
 							dealer.increaseTurn();
 							newMessage.msgType = MessageType.TURN;
 							newMessage.currentBet = 0;
+							newMessage.message="What is your wager?";
 						}
 					} else {
 						newMessage.msgType = MessageType.TURN;
 						dealer.increaseTurn();
 						newMessage.currentBet = dealer.prevBet-dealer.getBet(dealer.getTurn());
+						if(dealer.prevBet==dealer.getBet(dealer.getTurn())){
+							newMessage.message="What is your wager?";
+						}
+						else
+						{
+							if(dealer.getBet(dealer.getTurn())==0)
+								newMessage.message=(dealer.prevBet-dealer.getBet(dealer.getTurn()))+" to call";
+							else
+								newMessage.message="Raised to "+dealer.prevBet+"\n"+(dealer.prevBet-dealer.getBet(dealer.getTurn()))+" to call";
+						}
 						
 					}
 					break;
@@ -131,6 +142,7 @@ public class TCPListener3 extends Thread {
 						newMessage.msgType=MessageType.RESULT;
 						newMessage.money=dealer.getPot();
 						newMessage.result=Result.WIN; 
+						newMessage.message="You Won!";
 					} else {
 						if (dealer.sameCount == dealer.getPlayers().size()) {
 							if (dealer.getCards().size() == 5) {
