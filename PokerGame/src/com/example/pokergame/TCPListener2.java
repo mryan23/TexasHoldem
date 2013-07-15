@@ -75,33 +75,31 @@ public class TCPListener2 extends Thread {
 				}
 			}
 			Message m = (Message) ois.readObject();
+			
 			// System.out.println(m.card.getValue());
 			DataOutputStream outToClient = new DataOutputStream(
 					connectionSocket.getOutputStream());
 			outToClient.writeBytes("ACK" + "\n");
 
 			synchronized (p) {
+				p.updated = true;
 				switch (m.msgType) {
 				case CARD:
-					synchronized (p) {
-						if (!p.getHand().hand.contains(m.card)) {
-							p.addCard(m.card);
-						}
+					if (!p.getHand().hand.contains(m.card)) {
+						p.addCard(m.card);
 					}
 					break;
 				case TURN:
-					synchronized (p) {
-						System.out.println("MINE!!!");
-						p.turn = true;
-						p.minBet = m.currentBet;
-					}
+					System.out.println("MINE!!!");
+					p.turn = true;
+					p.minBet = m.currentBet;
 					break;
 				case RESULT:
 					System.out.println("RESULT RECIEVED");
 					System.out.println(m.money);
-					p.addMoney(m.money);
+					p.addMoney(m.money); 
 					p.setStatus(Player.GAME_OVER);
-					
+
 					break;
 				default:
 					break;

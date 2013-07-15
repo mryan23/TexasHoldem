@@ -90,51 +90,47 @@ public class TCPListener3 extends Thread {
 			System.out.println("RECIEVED: " + m.msgType);
 			synchronized (dealer) {
 				switch (m.msgType) {
-				case BET:
+				case BET: 
 					dealer.addToPot(m.proposedBet);
-					if (dealer.prevBet == m.proposedBet) {
+					dealer.addToBet(dealer.getTurn(), m.proposedBet);
+					if (dealer.prevBet == dealer.getBet(dealer.getTurn())) {
 						dealer.sameCount++;
 					} else {
-						dealer.prevBet = m.proposedBet;
+						dealer.prevBet = dealer.getBet(dealer.getTurn());
 						dealer.sameCount = 1;
 					}
 					if (dealer.sameCount == dealer.getPlayers().size()) {
 						// DEAL CARDS
 						if (dealer.getCards().size() == 5) {
 							dealer.dealCards();
-
+							
 							synchronized (lock) {
 								lock = null;
 							}
 						} else {
 							dealer.sameCount = 0;
+							dealer.prevBet=0;
 							dealer.dealCards();
 							dealer.increaseTurn();
 							newMessage.msgType = MessageType.TURN;
 							newMessage.currentBet = 0;
-							stm = new SendTcpMessage2(dealer.getPlayers().get(
-									dealer.getTurn()), newMessage);
-							stm.start();
 						}
 					} else {
-						dealer.increaseTurn();
 						newMessage.msgType = MessageType.TURN;
-						newMessage.currentBet = dealer.prevBet;
-						stm = new SendTcpMessage2(dealer.getPlayers().get(
-								dealer.getTurn()), newMessage);
-						stm.start();
+						dealer.increaseTurn();
+						newMessage.currentBet = dealer.prevBet-dealer.getBet(dealer.getTurn());
+						
 					}
 					break;
-				case TURN:
+				case TURN: 
 					break;
 				case FOLD:
 					dealer.foldCurrentPlayer();
 					if (dealer.getPlayers().size() == 1) {
 						dealer.winnerText="Winner";
-						Message foldMessage = new Message();
-						foldMessage.msgType=MessageType.RESULT;
-						foldMessage.money=dealer.getPot();
-						foldMessage.result=Result.WIN;
+						newMessage.msgType=MessageType.RESULT;
+						newMessage.money=dealer.getPot();
+						newMessage.result=Result.WIN; 
 					} else {
 						if (dealer.sameCount == dealer.getPlayers().size()) {
 							if (dealer.getCards().size() == 5) {
@@ -148,17 +144,13 @@ public class TCPListener3 extends Thread {
 								dealer.dealCards();
 								newMessage.currentBet = 0;
 								newMessage.msgType = MessageType.TURN;
-								stm = new SendTcpMessage2(dealer.getPlayers()
-										.get(dealer.getTurn()), newMessage);
-								stm.start();
+
 							}
 						} else {
-							newMessage.currentBet = dealer.prevBet;
+							newMessage.currentBet = dealer.prevBet-dealer.getBet(dealer.getTurn());
 							newMessage.msgType = MessageType.TURN;
 
-							stm = new SendTcpMessage2(dealer.getPlayers().get(
-									dealer.getTurn()), newMessage);
-							stm.start();
+							
 						}
 					}
 					break;
@@ -172,6 +164,9 @@ public class TCPListener3 extends Thread {
 					break;
 
 				}
+ 				stm = new SendTcpMessage2(dealer.getPlayers().get(
+						dealer.getTurn()), newMessage);
+				stm.start();
 			}
 
 		} catch (Exception e) {

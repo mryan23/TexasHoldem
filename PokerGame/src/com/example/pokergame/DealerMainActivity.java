@@ -36,6 +36,7 @@ public class DealerMainActivity extends Activity {
 	boolean[] drawn = { false, false, false, false, false };
 	boolean winnerDisplayed = false;
 	volatile Object lock = new Object();
+	Button startButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,8 @@ public class DealerMainActivity extends Activity {
 				SendTcpMessage2 sendTcp = new SendTcpMessage2(ip, newMessage);
 				sendTcp.start();
 			}
+			for(int i = 0; i < drawn.length;i++)
+				drawn[i]=false;
 			
 			
 		}
@@ -159,9 +162,10 @@ public class DealerMainActivity extends Activity {
 			// imageViews[i].setImageBitmap(BitmapFactory.decodeFile("res/drawable-hdpi/img"+c.getValue()+"_"+c.getSuit()+".png"));
 
 		}
+		startButton.setEnabled(true);
 		deck=new Deck();
 		deck.shuffle();
-		dealer=new Dealer(deck);
+		dealer.reset(deck);
 		ArrayList<InetAddress> dummy = new ArrayList<InetAddress>();
 		for (int index = 0; index < player_addr.size(); index++)
 			dummy.add(player_addr.get(index));
@@ -171,13 +175,16 @@ public class DealerMainActivity extends Activity {
 	}
 
 	public void setListeners() {
-		Button test = (Button) findViewById(R.id.sendTestCard);
-		test.setOnClickListener(new OnClickListener() {
+		startButton = (Button) findViewById(R.id.sendTestCard);
+		startButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Button temp=(Button)v;
+				v.setEnabled(false);
 				synchronized (dealer) {
+					winnerDisplayed=false;
 					ArrayList<Hand> hands = new ArrayList<Hand>();
 					for (int j = 0; j < dealer.getPlayers().size(); j++) {
 						hands.add(new Hand());

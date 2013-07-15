@@ -75,9 +75,9 @@ public class PlayerHandActivity extends Activity {
 			public void run() {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						synchronized (p) {
-							updateScreen();
-						}
+						// synchronized (p) {
+						updateScreen();
+						// }
 					}
 				});
 			}
@@ -86,37 +86,45 @@ public class PlayerHandActivity extends Activity {
 	}
 
 	private void updateScreen() {
-		synchronized (p) {
-			if (p.status == Player.FOLDED || p.status == Player.GAME_OVER) {
-				clearScreen();
-			}
-
-			if (!hasRecievedCards && p.getHand().hand.size() > 0) {
-				for (int i = 0; i < p.getHand().hand.size(); i++) {
-					Card c = p.getHand().hand.get(i);
-					imageViews[i].setImageResource((getResources()
-							.getIdentifier(
-									"img" + c.getValue() + "_" + c.getSuit(),
-									"drawable", "com.example.pokergame")));
-				}
-			}
-			if (p.getHand().hand.size() == 2) {
-				hasRecievedCards = true;
-			}
-
-			if (foldButton.isEnabled() != p.turn)
-				foldButton.setEnabled(p.turn);
-			if (betButton.isEnabled() != p.turn)
-				betButton.setEnabled(p.turn);
-			if (p.turn) {
-				turnText.setText("Its your turn!");
-			} else {
-				turnText.setText(" ");
-			}
-			np.setMaxValue(p.getTotalMoney());
-			moneyText.setText(p.getTotalMoney()+"");
-
+		// synchronized (p) {
+		if (p.status == Player.FOLDED || p.status == Player.GAME_OVER) {
+			clearScreen();
 		}
+
+		if (!hasRecievedCards && p.getHand().hand.size() > 0) {
+			for (int i = 0; i < p.getHand().hand.size(); i++) {
+				Card c = p.getHand().hand.get(i);
+				imageViews[i].setImageResource((getResources().getIdentifier(
+						"img" + c.getValue() + "_" + c.getSuit(), "drawable",
+						"com.example.pokergame")));
+			}
+		}
+		if (p.getHand().hand.size() == 2) {
+			hasRecievedCards = true;
+		}
+
+		if (foldButton.isEnabled() != p.turn)
+			foldButton.setEnabled(p.turn);
+		if (betButton.isEnabled() != p.turn)
+			betButton.setEnabled(p.turn);
+		if (p.turn) {
+			turnText.setText("Its your turn!");
+		} else {
+			turnText.setText(" ");
+		}
+		if (p.updated) {
+			np.setMaxValue(p.getTotalMoney());
+			if (p.minBet >= 0) {
+				np.setMinValue(p.minBet);
+				if(p.minBet>0)
+					np.setValue(p.minBet);
+				
+			}
+			p.updated = false;
+		}
+		moneyText.setText(p.getTotalMoney() + "");
+
+		// }
 	}
 
 	private void clearScreen() {

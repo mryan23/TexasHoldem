@@ -14,6 +14,7 @@ public class Player implements Comparable<Player> {
 	public int status;
 	public int minBet;
 	public boolean turn = false;
+	public boolean updated = false;
 
 	public Player(int money) {
 		this.money = money;

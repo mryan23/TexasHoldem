@@ -13,6 +13,7 @@ public class Dealer {
 	private int pot;
 	private ArrayList<Card> cards;
 	private ArrayList<InetAddress> player_addr;
+	private ArrayList<Integer> playerBets;
 	public ArrayList<Hand> hands;
 	private int turn;
 	public int prevBet;
@@ -21,11 +22,15 @@ public class Dealer {
 	public String winnerText;
 	
 	public Dealer(Deck d) {
+		reset(d);
+	}
+	public void reset(Deck d){
 		deck = d;
 		pot = 0;
 		turn = 0;
 		cards = new ArrayList<Card>();
 		player_addr = new ArrayList<InetAddress>();
+		playerBets = new ArrayList<Integer>();
 		prevBet = 0;
 		sameCount = 0;
 		winnerText="";
@@ -49,6 +54,25 @@ public class Dealer {
 
 	public void setPlayers(ArrayList<InetAddress> players) {
 		player_addr = players;
+		for(InetAddress ip : player_addr)
+			playerBets.add(0);
+	}
+	
+	public int getBet(int i){
+		if(i < playerBets.size() && i >= 0)
+			return playerBets.get(i);
+		return -1;
+	}
+	public void addToBet(int i, int val){
+		if(i < playerBets.size() && i >= 0){
+			Integer removed = playerBets.remove(i);
+			playerBets.add(i, removed+val);
+		}
+	}
+	public void clearBets(){
+		playerBets=new ArrayList<Integer>();
+		for(InetAddress ip:player_addr)
+			playerBets.add(0);
 	}
 
 	public ArrayList<InetAddress> getPlayers() {
@@ -65,11 +89,13 @@ public class Dealer {
 
 	public void foldCurrentPlayer() {
 		player_addr.remove(turn);
+		playerBets.remove(turn);
 		if (turn >= player_addr.size())
 			turn = 0;
 	}
 
 	public void dealCards() {
+		clearBets();
 		if (cards.size() == 0) {
 			cards.add(deck.getTop());
 			cards.add(deck.getTop());
