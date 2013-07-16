@@ -34,14 +34,14 @@ public class PlayerJoinGameActivity extends Activity {
 
 		TCPListener listener;
 		
-		UDPListener udpListener;
+		//UDPListener udpListener;
 
 		try {
 			listener = new TCPListener(new ServerSocket(6789), isSuccessful);
 			listener.sendResponse(false);
 			listener.start();
-			udpListener = new UDPListener();
-			udpListener.start();
+			//udpListener = new UDPListener();
+			//udpListener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

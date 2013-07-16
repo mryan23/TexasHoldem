@@ -33,7 +33,7 @@ public class DealerCreateGameActivity extends Activity {
 	Context context = this;
 	ServerSocket sock;
 
-	Thread udpThread;
+	//Thread udpThread;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class DealerCreateGameActivity extends Activity {
 				InetAddress broad = ia.getBroadcast();
 				String dummy = broad.toString();
 				dummy+=" ";
-				udpThread = new UDPBroadcaster(broad);
+				//udpThread = new UDPBroadcaster(broad);
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -71,7 +71,7 @@ public class DealerCreateGameActivity extends Activity {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		udpThread.start();
+		//udpThread.start();
 
 		Timer autoUpdate = new Timer();
 		autoUpdate.schedule(new TimerTask() {
@@ -91,7 +91,7 @@ public class DealerCreateGameActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				udpThread.interrupt();
+				//udpThread.interrupt();
 				for (InetAddress addr : player_addr) {
 					SendTcpMessage stm = new SendTcpMessage(addr, "STARTGAME");
 					stm.start();
