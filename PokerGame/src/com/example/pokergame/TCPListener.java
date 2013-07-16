@@ -19,10 +19,11 @@ public class TCPListener extends Thread {
 	boolean isDealer = true;
 	boolean sendResponse = true;
 
-	public TCPListener(ServerSocket socket, ArrayList<Integer> isSuccessful) {
+	public TCPListener(ServerSocket socket, ArrayList<Integer> isSuccessful, ArrayList<InetAddress>adds) {
 		sock = socket;
 		this.isSuccessful = isSuccessful;
 		isDealer = false;
+		player_addr=adds;
 	}
 
 	public TCPListener(ServerSocket socket, ArrayList<InetAddress> player_addr,
@@ -65,6 +66,11 @@ public class TCPListener extends Thread {
 						System.out.println(message);
 						this.player_addr.add(ip);
 					}
+				}
+			}
+			else{
+				if(!this.player_addr.contains(add)){
+					player_addr.add(add);
 				}
 			}
 			String clientSentence = inFromClient.readLine();

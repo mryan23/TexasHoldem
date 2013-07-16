@@ -90,7 +90,7 @@ public class TCPListener3 extends Thread {
 			System.out.println("RECIEVED: " + m.msgType);
 			synchronized (dealer) {
 				switch (m.msgType) {
-				case BET: 
+				case BET:
 					dealer.addToPot(m.proposedBet);
 					dealer.addToBet(dealer.getTurn(), m.proposedBet);
 					if (dealer.prevBet == dealer.getBet(dealer.getTurn())) {
@@ -103,46 +103,70 @@ public class TCPListener3 extends Thread {
 						// DEAL CARDS
 						if (dealer.getCards().size() == 5) {
 							dealer.dealCards();
-							
+
 							synchronized (lock) {
 								lock = null;
 							}
 						} else {
 							dealer.sameCount = 0;
-							dealer.prevBet=0;
+							dealer.prevBet = 0;
 							dealer.dealCards();
 							dealer.increaseTurn();
 							newMessage.msgType = MessageType.TURN;
 							newMessage.currentBet = 0;
-							newMessage.message="What is your wager?";
+							newMessage.message = "What is your wager?";
 						}
 					} else {
 						newMessage.msgType = MessageType.TURN;
 						dealer.increaseTurn();
-						newMessage.currentBet = dealer.prevBet-dealer.getBet(dealer.getTurn());
-						if(dealer.prevBet==dealer.getBet(dealer.getTurn())){
-							newMessage.message="What is your wager?";
+						newMessage.currentBet = dealer.prevBet
+								- dealer.getBet(dealer.getTurn());
+						if (dealer.prevBet == dealer.getBet(dealer.getTurn())) {
+							newMessage.message = "What is your wager?";
+						} else {
+							if (dealer.getBet(dealer.getTurn()) == 0)
+								newMessage.message = (dealer.prevBet - dealer
+										.getBet(dealer.getTurn())) + " to call";
+							else {
+								int index;
+								if(dealer.getTurn()==0)
+									index=dealer.getPlayers().size()-1;
+								else
+									index=dealer.getTurn()-1;
+								int val = dealer.getBet(index);
+								String str="";
+								while(index!= dealer.getTurn()){
+									int nindex;
+									if(index==0)
+										nindex=dealer.getPlayers().size()-1;
+									else
+										nindex=index-1;
+									if(dealer.getBet(nindex)<val){
+										str=dealer.playerNames.get(index)+" ";
+									}
+									index=nindex;
+								}
+								newMessage.message = str+ "raised to "
+										+ dealer.prevBet
+										+ "\n"
+										+ (dealer.prevBet - dealer
+												.getBet(dealer.getTurn()))
+										+ " to call";
+							}
 						}
-						else
-						{
-							if(dealer.getBet(dealer.getTurn())==0)
-								newMessage.message=(dealer.prevBet-dealer.getBet(dealer.getTurn()))+" to call";
-							else
-								newMessage.message="Raised to "+dealer.prevBet+"\n"+(dealer.prevBet-dealer.getBet(dealer.getTurn()))+" to call";
-						}
-						
+
 					}
 					break;
-				case TURN: 
+				case TURN:
 					break;
 				case FOLD:
 					dealer.foldCurrentPlayer();
 					if (dealer.getPlayers().size() == 1) {
-						dealer.winnerText="Winner";
-						newMessage.msgType=MessageType.RESULT;
-						newMessage.money=dealer.getPot();
-						newMessage.result=Result.WIN; 
-						newMessage.message="You Won!";
+						dealer.winnerText = "Winner";
+						newMessage.msgType = MessageType.RESULT;
+						newMessage.money = dealer.getPot();
+						newMessage.result = Result.WIN;
+						newMessage.message = "You Won!";
 					} else {
 						if (dealer.sameCount == dealer.getPlayers().size()) {
 							if (dealer.getCards().size() == 5) {
@@ -159,10 +183,10 @@ public class TCPListener3 extends Thread {
 
 							}
 						} else {
-							newMessage.currentBet = dealer.prevBet-dealer.getBet(dealer.getTurn());
+							newMessage.currentBet = dealer.prevBet
+									- dealer.getBet(dealer.getTurn());
 							newMessage.msgType = MessageType.TURN;
 
-							
 						}
 					}
 					break;
@@ -176,7 +200,7 @@ public class TCPListener3 extends Thread {
 					break;
 
 				}
- 				stm = new SendTcpMessage2(dealer.getPlayers().get(
+				stm = new SendTcpMessage2(dealer.getPlayers().get(
 						dealer.getTurn()), newMessage);
 				stm.start();
 			}

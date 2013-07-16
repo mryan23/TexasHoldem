@@ -32,6 +32,7 @@ public class DealerMainActivity extends Activity {
 	Dealer dealer = new Dealer(deck);
 	TextView potTextView, debugCardTextView;
 	ArrayList<InetAddress> player_addr = new ArrayList<InetAddress>();
+	ArrayList<String>playerNames = new ArrayList<String>();
 	ImageView[] imageViews = new ImageView[5];
 	boolean[] drawn = { false, false, false, false, false };
 	boolean winnerDisplayed = false;
@@ -66,6 +67,7 @@ public class DealerMainActivity extends Activity {
 		Bundle bundle = i.getExtras();
 		System.out.println(bundle == null);
 		String[] ipAddrs = bundle.getStringArray("ipAddresses");
+		String[] names = bundle.getStringArray("names");
 		deck.shuffle();
 		Timer autoUpdate = new Timer();
 		autoUpdate.schedule(new TimerTask() {
@@ -81,18 +83,24 @@ public class DealerMainActivity extends Activity {
 
 		try {
 
-			if (ipAddrs != null) {
+			if (ipAddrs != null&&names!=null) {
 				for (int index = 0; index < ipAddrs.length; index++) {
 					System.out.println(ipAddrs[index]);
 					player_addr.add(InetAddress.getByName(ipAddrs[index]
 							.substring(1)));
-
 				}
+				for(int index = 0; index < names.length; index++){
+					playerNames.add(names[index]);
+				}
+				
 				ArrayList<InetAddress> dummy = new ArrayList<InetAddress>();
 				for (int index = 0; index < player_addr.size(); index++)
 					dummy.add(player_addr.get(index));
+				ArrayList<String> dummyNames = new ArrayList<String>();
+				for(int index = 0; index < playerNames.size(); index++)
+					dummyNames.add(playerNames.get(index));
 				synchronized (dealer) {
-					dealer.setPlayers(dummy);
+					dealer.setPlayers(dummy,dummyNames);
 				}
 			}
 
@@ -179,8 +187,11 @@ public class DealerMainActivity extends Activity {
 		ArrayList<InetAddress> dummy = new ArrayList<InetAddress>();
 		for (int index = 0; index < player_addr.size(); index++)
 			dummy.add(player_addr.get(index));
+		ArrayList<String> dummyNames = new ArrayList<String>();
+		for(int index = 0; index < playerNames.size(); index++)
+			dummyNames.add(playerNames.get(index));
 		synchronized (dealer) {
-			dealer.setPlayers(dummy);
+			dealer.setPlayers(dummy,dummyNames);
 		}
 	}
 
@@ -190,47 +201,51 @@ public class DealerMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Button temp=(Button)v;
-				v.setEnabled(false);
-				synchronized (dealer) {
-					winnerDisplayed=false;
-					ArrayList<Hand> hands = new ArrayList<Hand>();
-					for (int j = 0; j < dealer.getPlayers().size(); j++) {
-						hands.add(new Hand());
-					}
-					for (int i = 0; i < 2; i++) {
-						// for (InetAddress ip : dealer.getPlayers()) {
-						for (int j = 0; j < dealer.getPlayers().size(); j++) {
-							InetAddress ip = dealer.getPlayers().get(j);
-							Message message = new Message();
-							message.msgType = MessageType.CARD;
-							Card top = deck.getTop();
-							try {
-								hands.get(j).addCard(top);
-							} catch (TooManyCardsException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							message.card = top;
-							System.out.println(message.card);
-							SendTcpMessage2 stm = new SendTcpMessage2(ip,
-									message);
-							stm.start();
-						}
-					}
-					dealer.hands = hands;
-					int turn = dealer.getTurn();
-					Message message = new Message();
-					message.msgType = MessageType.TURN;
-					message.currentBet = 0;
-					SendTcpMessage2 stm = new SendTcpMessage2(dealer
-							.getPlayers().get(turn), message);
-					stm.start();
-				}
+				startGame(v);
 			}
 
 		});
+	}
+	
+	public void startGame(View v){
+		// TODO Auto-generated method stub
+		Button temp=(Button)v;
+		v.setEnabled(false);
+		synchronized (dealer) {
+			winnerDisplayed=false;
+			ArrayList<Hand> hands = new ArrayList<Hand>();
+			for (int j = 0; j < dealer.getPlayers().size(); j++) {
+				hands.add(new Hand());
+			}
+			for (int i = 0; i < 2; i++) {
+				// for (InetAddress ip : dealer.getPlayers()) {
+				for (int j = 0; j < dealer.getPlayers().size(); j++) {
+					InetAddress ip = dealer.getPlayers().get(j);
+					Message message = new Message();
+					message.msgType = MessageType.CARD;
+					Card top = deck.getTop();
+					try {
+						hands.get(j).addCard(top);
+					} catch (TooManyCardsException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					message.card = top;
+					System.out.println(message.card);
+					SendTcpMessage2 stm = new SendTcpMessage2(ip,
+							message);
+					stm.start();
+				}
+			}
+			dealer.hands = hands;
+			int turn = dealer.getTurn();
+			Message message = new Message();
+			message.msgType = MessageType.TURN;
+			message.currentBet = 0;
+			SendTcpMessage2 stm = new SendTcpMessage2(dealer
+					.getPlayers().get(turn), message);
+			stm.start();
+		}
 	}
 
 	@Override
@@ -250,8 +265,7 @@ public class DealerMainActivity extends Activity {
 		alertDialogBuilder.setMessage(message).setCancelable(false)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						// if this button is clicked, close
-						// current activity
+						startGame(startButton);
 					}
 				});
 

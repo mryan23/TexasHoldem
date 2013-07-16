@@ -13,6 +13,7 @@ public class Dealer {
 	private int pot;
 	private ArrayList<Card> cards;
 	private ArrayList<InetAddress> player_addr;
+	public ArrayList<String> playerNames;
 	private ArrayList<Integer> playerBets;
 	public ArrayList<Hand> hands;
 	private int turn;
@@ -32,6 +33,7 @@ public class Dealer {
 		cards = new ArrayList<Card>();
 		player_addr = new ArrayList<InetAddress>();
 		playerBets = new ArrayList<Integer>();
+		playerNames = new ArrayList<String>();
 		prevBet = 0;
 		sameCount = 0;
 		winnerText="";
@@ -54,8 +56,9 @@ public class Dealer {
 		return cards;
 	}
 
-	public void setPlayers(ArrayList<InetAddress> players) {
+	public void setPlayers(ArrayList<InetAddress> players, ArrayList<String> names) {
 		player_addr = players;
+		playerNames = names;
 		for(InetAddress ip : player_addr)
 			playerBets.add(0);
 	}
@@ -92,6 +95,7 @@ public class Dealer {
 	public void foldCurrentPlayer() {
 		player_addr.remove(turn);
 		playerBets.remove(turn);
+		playerNames.remove(turn);
 		if (turn >= player_addr.size())
 			turn = 0;
 	}
@@ -123,7 +127,7 @@ public class Dealer {
 				int index = HandRank.compareHands(ha);
 				winner=index;
 				System.out.println("WINNER IS "+index+" WITH "+new HandRank(hands.get(index)).getRankName());
-				winnerText="Winner "+new HandRank(hands.get(index)).getRankName();
+				winnerText=playerNames.get(index)+" wins with "+new HandRank(hands.get(index)).getRankName();
 				for(int i = 0; i < player_addr.size(); i++){
 					Message newMessage = new Message();
 					newMessage.setMsgType(MessageType.RESULT);

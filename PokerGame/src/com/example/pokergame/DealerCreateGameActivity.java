@@ -27,13 +27,14 @@ public class DealerCreateGameActivity extends Activity {
 
 	Object lock = new Object();
 	ArrayList<InetAddress> player_addr = new ArrayList<InetAddress>();
+	ArrayList<String> names = new ArrayList<String>();
 	
 	TextView ipAddressEditText, connectedPlayersTextView;
 	TCPListener listener;
 	Context context = this;
 	ServerSocket sock;
 
-	//Thread udpThread;
+	Thread udpThread;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,32 +47,16 @@ public class DealerCreateGameActivity extends Activity {
 		try {
 			sock = new ServerSocket(6789);
 			listener = new TCPListener(sock, player_addr, lock);
+			listener.sendResponse(false);
 			listener.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		try {
-			NetworkInterface ni;
-			try {
-				ni = NetworkInterface.getByInetAddress(InetAddress.getByName(Utils.getIPAddress(true)));
-				InterfaceAddress ia = ni.getInterfaceAddresses().get(1);
-				InetAddress broad = ia.getBroadcast();
-				String dummy = broad.toString();
-				dummy+=" ";
-				//udpThread = new UDPBroadcaster(broad);
-			} catch (SocketException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		//udpThread.start();
+		
+		udpThread = new UDPListener(player_addr,names);
+		udpThread.start();
 
 		Timer autoUpdate = new Timer();
 		autoUpdate.schedule(new TimerTask() {
@@ -108,8 +93,13 @@ public class DealerCreateGameActivity extends Activity {
 				for (int i = 0; i < ipAddrs.length; i++) {
 					ipAddrs[i] = player_addr.get(i).toString();
 				}
+				String[] namesArray = new String[names.size()];
+				for(int i = 0; i < names.size(); i++){
+					namesArray[i]=names.get(i);
+				}
 				Bundle bundle = new Bundle();
 				bundle.putStringArray("ipAddresses", ipAddrs);
+				bundle.putStringArray("names",namesArray);
 				Intent i = new Intent(context, DealerMainActivity.class);
 				i.putExtras(bundle);
 				startActivity(i);

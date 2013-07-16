@@ -12,8 +12,7 @@
     <TextView
         android:id="@+id/connectedUsersTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PLAYER" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/DebugCardTextView"
@@ -22,11 +21,11 @@
         android:layout_alignLeft="@+id/connectedUsersTextView"
         android:layout_below="@+id/connectedUsersTextView"
         android:layout_marginTop="38dp"
-        android:text="Enter IP of Dealer:"
+        android:text="Enter Name:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/ipAddressEditText"
+        android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/DebugCardTextView"
@@ -34,7 +33,7 @@
         android:layout_marginLeft="32dp"
         android:layout_toRightOf="@+id/DebugCardTextView"
         android:ems="10"
-        android:inputType="phone" >
+        android:inputType="text" >
 
         <requestFocus />
     </EditText>
@@ -43,10 +42,10 @@
         android:id="@+id/joinGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/ipAddressEditText"
-        android:layout_alignBottom="@+id/ipAddressEditText"
+        android:layout_alignBaseline="@+id/nameEditText"
+        android:layout_alignBottom="@+id/nameEditText"
         android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@+id/ipAddressEditText"
+        android:layout_toRightOf="@+id/nameEditText"
         android:text="Join" />
 
 </RelativeLayout>

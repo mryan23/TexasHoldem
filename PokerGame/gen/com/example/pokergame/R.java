@@ -94,11 +94,11 @@ public final class R {
         public static final int imageView3=0x7f080009;
         public static final int imageView4=0x7f08000a;
         public static final int imageView5=0x7f08000b;
-        public static final int ipAddressEditText=0x7f080018;
         public static final int ipAddressText=0x7f080000;
         public static final int joinGameButton=0x7f080019;
         public static final int linearLayout1=0x7f080006;
         public static final int money=0x7f080011;
+        public static final int nameEditText=0x7f080018;
         public static final int playerImageView1=0x7f08000e;
         public static final int playerImageView2=0x7f08000f;
         public static final int playerRoleButton=0x7f08001b;
