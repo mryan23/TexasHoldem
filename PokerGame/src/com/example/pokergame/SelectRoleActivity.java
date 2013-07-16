@@ -14,6 +14,7 @@ public class SelectRoleActivity extends Activity {
 	Button playerButton;
 	Button dealerButton;
 	Context context;
+	//written from aide!!!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
